@@ -1,0 +1,77 @@
+//Singly Linked List insert at tail and head for array
+
+#include<iostream>
+using namespace std;
+
+class Node{
+public:
+    int data;
+    Node* next; 
+};
+
+void printListElements(Node *node){
+    while(node!=nullptr){
+        cout << node->data << "->";
+        node= node-> next;
+    }
+    cout << "null" << endl;
+}
+
+void insertAtFront(Node** head, int newValue) //* means pointer ** means value
+{
+    // Create a new node
+    Node* newNode = new Node();
+    newNode -> data =newValue;
+    //Make the new node point to the new head 
+    newNode->next = *head;
+    //Make the new node the new head
+    *head = newNode;
+}
+
+void insertAtTail(Node** head, int newValue){
+     // Create a new node
+    Node* newNode = new Node();
+    newNode -> data =newValue;
+    //Because it will be tail//& tail points to null
+    newNode-> next =nullptr;
+    //Empty List
+    if(*head == nullptr){
+        *head =newNode;
+        return;
+    }
+        Node* last = *head;
+        while(last-> next != nullptr){
+            last =last-> next; 
+        } 
+        last-> next = newNode;
+}
+
+int main(){
+    //Manually create a Linked List 1->2->3->null
+       // Node* head=new Node();
+      //  head -> data = 1;
+//        Node* second=new Node();
+  //      second  -> data =2;
+   //     Node* third=new Node();
+    //    third -> data =3;
+     //   head -> next = second;
+      //  second -> next = third;
+    //    third -> next = nullptr;
+    //    printListElements(head);
+    Node* head = nullptr ;
+    insertAtFront(&head,1);
+    insertAtFront(&head,2);
+    insertAtFront(&head,3);
+    insertAtFront(&head,4);
+    insertAtTail(&head,5);    
+    insertAtTail(&head,6);
+    int arr[] = {7,8,9};
+	int size = sizeof(arr)/ sizeof(arr[0]);
+
+	for(int i=0;i<size;++i){
+            insertAtTail(&head,arr[i]);
+	}
+	printListElements(head);
+    return 0;
+}
+   
