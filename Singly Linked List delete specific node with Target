@@ -1,0 +1,182 @@
+//Singly Linked List delete specific node with Target 
+
+#include<iostream>
+using namespace std;
+
+class Node{
+public:
+    int data;
+    Node* next; 
+};
+
+void printListElements(Node *node){
+    while(node!=nullptr){
+        cout << node->data << "->";
+        node= node-> next;
+    }
+    cout << "null" << endl;
+}
+
+void insertAtFront(Node** head, int newValue) //* means pointer ** means value
+{
+    // Create a new node
+    Node* newNode = new Node();
+    newNode -> data =newValue;
+    //Make the new node point to the new head 
+    newNode->next = *head;
+    //Make the new node the new head
+    *head = newNode;
+}
+
+void insertAtTail(Node** head, int newValue){
+     // Create a new node
+    Node* newNode = new Node();
+    newNode -> data =newValue;
+    //Because it will be tail//& tail points to null
+    newNode-> next =nullptr;
+    //Empty List
+    if(*head == nullptr){
+        *head =newNode;
+        return;
+    }
+        Node* last = *head;
+        while(last-> next != nullptr){
+            last =last-> next; 
+        } 
+        last-> next = newNode;
+}
+
+void insertAfterSpecific(Node* previous, int newValue){
+    //Previous cannot be null
+    if(previous==nullptr){
+        cout << "Previous node cannot be null" <<endl;
+        return;
+    }
+    //Create a new node
+    Node* newNode = new Node();
+    newNode -> data =newValue;
+    //Cannot  break the link of previous so we point it it next
+    newNode-> next= previous-> next;
+    previous-> next = newNode;
+}
+
+void deleteFrontNode(Node** head ){
+    //Empty list 
+    if(*head== nullptr){
+        cout << "Empty list, Cannot delete" << endl;
+        return;
+    }
+    // Create a temp node to ppoint to the head
+    Node* temp = *head;
+    //Move the head to the next element in the list
+    *head = (*head) -> next;
+    //delete the temp node
+    delete temp;
+}
+
+void deleteEndNode(Node** head){
+    //Check if the list is empty
+    if(*head== nullptr){
+        cout << "Empty list, Cannot delete" << endl;
+        return;
+    }
+    //Single element
+    if ((*head)-> next == nullptr){
+        delete *head;
+        *head = nullptr;
+        return;
+    }
+    //Multiple nodes
+    //Traverse till the end of the list to find the lsot Node
+    Node* secondlast = nullptr;
+    Node* last = *head;
+    while(last->next != nullptr){
+        secondlast =last;
+        last = last->next;
+    }
+    delete last;
+    secondlast->next = nullptr;
+    
+}
+
+void deleteSpecificNodeWithTarget(Node** head, int target ){
+    //Check if the list is empty
+    if(*head== nullptr){
+        cout << "Empty list, Cannot delete" << endl;
+        return;
+    }
+    //If the head has the target value
+    if((*head)->data == target){
+        Node* temp = *head ;
+        (*head) = (*head)->next;
+        delete temp;
+        return;
+    }
+    //Two pointer approach
+    Node* prev = nullptr;
+    Node* curr = *head;
+    while(curr != nullptr && curr->data != target){
+        prev = curr;
+        curr = curr->next;
+    }
+    //Check whether the target is present or not
+    if(curr==nullptr){
+        cout<< "The target node is not present"<<endl;
+        return;
+        // always return the print statements
+    }
+    prev->next =curr->next;
+    delete curr;
+}
+
+int main(){
+    //Manually create a Linked List 1->2->3->null
+    //Node* head=new Node();
+    //head -> data = 1;
+    //Node* second=new Node();
+    //second  -> data =2;
+    //Node* third=new Node();
+    //third -> data =3;
+    //head -> next = second;
+    //second -> next = third;
+    //third -> next = nullptr;
+    //printListElements(head);
+    Node* head = nullptr ;
+    insertAtFront(&head,1);
+    insertAtFront(&head,2);
+    insertAtFront(&head,3);
+    insertAtFront(&head,4);
+    insertAtFront(&head,-2);
+    insertAtTail(&head,5);    
+    insertAtTail(&head,6);
+    
+    int arr[] = {7,8,9};
+	int size = sizeof(arr)/ sizeof(arr[0]);
+
+	for(int i=0;i<size;++i){
+            insertAtTail(&head,arr[i]);
+	}
+	printListElements(head);
+	insertAfterSpecific(head, 0);
+	insertAfterSpecific(head, -1);	
+	printListElements(head);
+	insertAfterSpecific(nullptr, 100);
+    cout<< "List before deletion of head:"<<endl;
+    printListElements(head);
+    deleteFrontNode(&head);
+    cout<< "List after deletion of head:"<<endl;
+    printListElements(head);
+    cout<< "List before deletion of tail:"<<endl;
+    printListElements(head);
+    deleteEndNode(&head);
+    cout<< "List after deletion of tail:"<<endl;
+    printListElements(head);
+    int target;
+    cout<< "Enter the target to delete "<<endl;
+    cin>> target;
+    printListElements(head);
+    deleteSpecificNodeWithTarget(&head, target);
+    cout<< "List before deletion of target:"<<target <<endl;
+    printListElements(head);
+    return 0;
+}
